@@ -50,7 +50,7 @@ class BukuBesarController extends Controller
         ]);
     }
 
-     public function listMstAkun()
+     public function listMstAkun() //terpakai
     {
        $items = MstAkunModel::where('created_by', $this->userId)
         ->orderBy('kode_akun')
@@ -964,7 +964,7 @@ public function storetransaksi(Request $request)
                 'Bayar Listrik'                       => [8,  1, 1, 2],
                 'Bayar Utang Bank'                    => [14, 1, 2, 2],
                 'Bayar Utang Usaha'                   => [5,  1, 2, 2],
-                'Bayar Piutang Usaha'                   => [20,  1, 2, 2],
+                'Bayar Piutang Usaha'                   => [1, 20, 2, 2],
                 'Beli Peralatan Tunai'                => [10, 1, 2, 2],
                 'Beli ATK Tunai'                      => [11, 1, 2, 2],
                 'Beli Persediaan Tunai'               => [6, 1, 2, 2],
@@ -1060,7 +1060,7 @@ public function storetransaksi(Request $request)
                 'Pendapatan Bunga',
                 'Pendapatan Lain-lain (Komisi/Hadiah)',
                 'Pinjang Uang Lainnya',  
-                'Bayar Piutang Usaha',    
+                    
                 'Jual Jasa'                 
             ];
             $kreditMenambahSaldo = in_array($tipe, $tipeKreditNaik, true); 
@@ -1068,7 +1068,7 @@ public function storetransaksi(Request $request)
             $tipeDebetBerkurang = [
                 'Bayar Utang Bank',
                 'Bayar Utang Usaha',
-                'Bayar Piutang Usaha',
+                
                 'Bayar Utang Lainnya',
             ];
 

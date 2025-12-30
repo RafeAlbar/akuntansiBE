@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+use App\Http\Controllers\Api\BukuBesarApi;
+use App\Http\Controllers\Api\LaporanKeuanganApi;
+
+Route::get('/mst-akun', [BukuBesarApi::class, 'listMstAkun']);
+Route::post('/saldo-awal', [BukuBesarApi::class, 'storeSaldoAwal']);
+
+Route::get('/laporan/laba-rugi', [LaporanKeuanganApi::class, 'getLabaRugi']);
+Route::get('/laporan/neraca', [LaporanKeuanganApi::class, 'getNeraca']);
+

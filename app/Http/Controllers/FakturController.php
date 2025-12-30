@@ -160,6 +160,8 @@ class FakturController extends Controller
     // ================== Common data ==================
     private function getInvoiceData(string $no): ?array
     {
+        $userId = $this->userId;
+
        $header = DB::table('dat_transaksi as t')
         ->select(
             't.no_transaksi',
@@ -173,6 +175,9 @@ class FakturController extends Controller
             DB::raw('SUM(t.total) as total')
         )
         ->where('t.no_transaksi', $no)
+         ->when($userId, function ($q) use ($userId) {
+            $q->where('t.created_by', $userId);
+        })
         ->groupBy('t.no_transaksi')
         ->first();
 
@@ -187,6 +192,9 @@ class FakturController extends Controller
             ->join('dat_barang as b', 'b.id_barang', '=', 't.id_barang')
             ->select('b.nama_barang','t.jml_barang as qty', 't.harga_mentah','t.subtotal','t.total')
             ->where('t.no_transaksi', $no)
+             ->when($userId, function ($q) use ($userId) {
+            $q->where('t.created_by', $userId);
+             })
             ->orderBy('t.id_transaksi')
             ->get();
 

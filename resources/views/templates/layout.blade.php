@@ -9,11 +9,23 @@
     <meta name="theme-color" content="#6777ef" />
     <link rel="icon" type="image/png" href="https://laravel.com/img/logomark.min.svg">
     <link rel="apple-touch-icon" href="https://laravel.com/img/logomark.min.svg">
-    <link rel="manifest" href="{{ asset('/manifest.json') }}">
+    {{-- <link rel="manifest" href="{{ asset('/manifest.json') }}"> --}}
     <title>SmartKeuangan</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="{{ asset('lte/font/SourceSans3-Italic-VariableFont_wght.ttf') }}">
+    <style>
+        @font-face {
+            font-family: 'Source Sans 3';
+            src: url("{{ asset('lte/font/SourceSans3-Italic-VariableFont_wght.ttf') }}") format('truetype');
+            font-style: italic;
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        body {
+            font-family: 'Source Sans 3', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+    </style>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('lte/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- overlayScrollbars -->
@@ -181,6 +193,28 @@
         color: #d48806 !important;
         /* bulatan emas */
     }
+
+    .main-sidebar .brand-link.brand-logo-wrap {
+        height: 120px !important;
+        padding: 10px 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+    }
+
+    .main-sidebar .brand-link.brand-logo-wrap .brand-logo-img {
+        max-height: 150px !important;
+        width: auto !important;
+        object-fit: contain !important;
+        display: block;
+    }
+
+    /* jarak antara logo dan search */
+    .main-sidebar .sidebar.sidebar-gap {
+        padding-top: 50px;
+        /* ganti dari margin-top */
+    }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -217,12 +251,17 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="#" class="brand-link d-flex justify-content-center text-dark fluid">
-                <Strong>Logo</Strong>
+            <a href="{{ url('/') }}" class="brand-link text-dark brand-logo-wrap">
+                <img src="{{ asset('assets/img/logonobg.png') }}" alt="SmartKeuangan" class="brand-logo-img">
             </a>
 
+
+
+
+
             <!-- Sidebar -->
-            <div class="sidebar">
+            <div class="sidebar sidebar-gap">
+
 
                 <!-- SidebarSearch Form -->
                 <div class="form-inline mt-3">
@@ -702,24 +741,33 @@
                     body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
                 })
             });
-            document.getElementById('dark-mode-toggle').addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                document.querySelector('.navbar').classList.toggle('dark-mode');
-                const inputs = document.querySelectorAll('.form-control-navbar');
-                inputs.forEach(input => input.classList.toggle('dark-mode'));
+            const darkToggle = document.getElementById('dark-mode-toggle');
+            if (darkToggle) {
+                darkToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    document.querySelector('.navbar').classList.toggle('dark-mode');
 
-                // Ubah ikon dari bulan ke matahari saat dark mode aktif
-                const icon = this.querySelector('i');
-                if (document.body.classList.contains('dark-mode')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    this.textContent = " Light Mode";
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    this.textContent = " Dark Mode";
-                }
-            });
+                    const inputs = document.querySelectorAll('.form-control-navbar');
+                    inputs.forEach(input => input.classList.toggle('dark-mode'));
+
+                    const icon = this.querySelector('i');
+                    if (document.body.classList.contains('dark-mode')) {
+                        if (icon) {
+                            icon.classList.remove('fa-moon');
+                            icon.classList.add('fa-sun');
+                        }
+                        this.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                    } else {
+                        if (icon) {
+                            icon.classList.remove('fa-sun');
+                            icon.classList.add('fa-moon');
+                        }
+                        this.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                    }
+                });
+            }
+
         });
     </script>
     <!-- Bootstrap Switch -->
@@ -757,8 +805,8 @@
     <script src="{{ asset('lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-    <script src="{{ asset('/sw.js') }}"></script>
-    <script>
+    {{-- <script src="{{ asset('/sw.js') }}"></script> --}}
+    {{-- <script>
         if ("serviceWorker" in navigator) {
             // Register a service worker hosted at the root of the
             // site using the default scope.
@@ -773,7 +821,7 @@
         } else {
             console.error("Service workers are not supported.");
         }
-    </script>
+    </script> --}}
     <script src="{{ asset('js/helper.js') }}"></script>
 
     @stack('scripts')

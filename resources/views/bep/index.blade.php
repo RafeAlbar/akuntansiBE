@@ -181,8 +181,9 @@
                 str = String(str).replace(/[^0-9,\.-]/g, '');
                 str = str.replace(/\./g, '').replace(',', '.');
                 const n = parseFloat(str);
-                return isNaN(n) ? 0 : n;
+                return isNaN(n) ? 0 : Math.abs(n);
             }
+
 
             function formatRupiah(value) {
                 const n = Number(value) || 0;
@@ -196,6 +197,7 @@
                 });
                 return total;
             }
+
 
             // ===== Load akun beban dari backend =====
             function loadAkunBeban() {
@@ -227,7 +229,8 @@
                         const opt = document.createElement('option');
                         opt.value = a.id;
                         opt.textContent = (a.kode_akun ? a.kode_akun + ' - ' : '') + a.nama_akun;
-                        opt.dataset.saldo = a.saldo_berjalan ?? 0;
+                        const saldoPositif = Math.abs(Number(a.saldo_berjalan ?? 0));
+                        opt.dataset.saldo = saldoPositif;
 
                         if (current && String(a.id) === String(current)) {
                             opt.selected = true;
@@ -267,7 +270,8 @@
                         const opt = document.createElement('option');
                         opt.value = p.id;
                         opt.textContent = (p.kode_akun ? p.kode_akun + ' - ' : '') + p.nama_akun;
-                        opt.dataset.saldo = p.saldo_berjalan ?? 0;
+                        const saldoPositif = Math.abs(Number(p.saldo_berjalan ?? 0));
+                        opt.dataset.saldo = saldoPositif;
 
                         if (current && String(p.id) === String(current)) {
                             opt.selected = true;
@@ -283,7 +287,7 @@
                 const selectBeban = e.target.closest('.select-akun-beban');
                 if (selectBeban) {
                     const opt = selectBeban.options[selectBeban.selectedIndex];
-                    const saldo = opt.dataset.saldo || 0;
+                    const saldo = Math.abs(Number(opt.dataset.saldo || 0));
                     const tr = selectBeban.closest('tr');
                     if (tr) {
                         const inputTotal = tr.querySelector('.input-total');
@@ -298,7 +302,7 @@
                 const selectPenjualan = e.target.closest('.select-penjualan');
                 if (selectPenjualan) {
                     const opt = selectPenjualan.options[selectPenjualan.selectedIndex];
-                    const saldo = opt.dataset.saldo || 0;
+                    const saldo = Math.abs(Number(opt.dataset.saldo || 0));
                     const tr = selectPenjualan.closest('tr');
                     if (tr) {
                         const inputTotal = tr.querySelector('.input-total');
