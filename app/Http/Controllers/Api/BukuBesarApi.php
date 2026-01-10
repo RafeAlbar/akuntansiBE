@@ -612,7 +612,7 @@ public function storetransaksi(Request $request)
     $ket      = $request->keterangan ?? null;
     $akunD    = $request->akun_debet_id;
     $akunK    = $request->akun_kredit_id;
-    $userId = $this->userId;
+    $userId = (int) $request->input('user_id', 0);
 
     DB::beginTransaction();
     try {
@@ -1074,6 +1074,7 @@ public function storetransaksi(Request $request)
             }
             $debetMengurangiSaldo = in_array($tipe, $tipeDebetBerkurang, true);
             $this->insertJurnalSimple(
+                 (int) $userId,
                 $tanggal,
                 (float)$nominal,
                 $ket,
@@ -1194,6 +1195,7 @@ public function storetransaksi(Request $request)
 
 
   private function insertJurnalSimple(
+    int $userId,  
     string $tanggal,
     float $nominal,
     ?string $keterangan,
@@ -1207,7 +1209,7 @@ public function storetransaksi(Request $request)
     bool $debetMengurangiSaldo = false
 ): void {
     // 1) Header jurnal (tetap)
-    $userId = $this->userId;
+    
     $idJurnal = DB::table('dat_header_jurnal')->insertGetId([
         'tgl_transaksi' => $tanggal,
         'no_referensi'  => $noReferensi,
@@ -1260,7 +1262,8 @@ public function storetransaksi(Request $request)
         return (int) preg_replace('/[^\d\-]/', '', (string)($v ?? '0'));
     };
 
-    $userId = $this->userId;
+  
+
         if ($debetMengurangiSaldo) {                                              // [changes]
             $affD = DB::table('mst_akun')
                 ->where('id', $akunDebet)
@@ -1470,12 +1473,12 @@ public function storetransaksi(Request $request)
         'total'     => $total,
     ]);
 }
-    public function listPemasok()
+    public function listPemasok(Request $request)
     {
-        $userId = $this->userId;
+         $userId = (int) $request->input('user_id', 0);
         $tp = (new PemasokModel)->getTable();     
         $tb = (new DatBarangModel)->getTable();   
-        $userId = $this->userId; 
+        
 
         $items = PemasokModel::query()
             ->from("$tp as p")
@@ -1498,9 +1501,9 @@ public function storetransaksi(Request $request)
         ]);
     }
 
-         public function listPelanggan()
+         public function listPelanggan(Request $request)
     {
-        $userId = $this->userId;
+         $userId = (int) $request->input('user_id', 0); 
          $items = pelangganModel::where('created_by', $userId) 
         ->orderBy('id_pelanggan')
         ->get(['id_pelanggan','nama_pelanggan']);
