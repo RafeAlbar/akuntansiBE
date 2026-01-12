@@ -1356,7 +1356,7 @@ public function storetransaksi(Request $request)
     $dateTo    = $request->get('date_to');   // 'YYYY-MM-DD'
     $page      = max(1, (int) $request->get('page', 1));
     $perPage   = max(1, min(100, (int) $request->get('per_page', 20)));
-    $userId    = $this->userId;
+    $userId = (int) $request->input('user_id', 0);
     $q = DB::table('dat_detail_jurnal as d')
         ->join('dat_header_jurnal as h', 'h.id_jurnal', '=', 'd.id_jurnal')
         ->join('mst_akun as a', 'a.id', '=', 'd.id_akun')
@@ -1425,7 +1425,7 @@ public function storetransaksi(Request $request)
         $periode  = $request->get('periode'); 
         $page     = max(1, (int) $request->get('page', 1));
         $perPage  = max(1, min(100, (int) $request->get('per_page', 20)));
-        $userId   = $this->userId;
+         $userId = (int) $request->input('user_id', 0);
             $q = DB::table('dat_buku_besar as b')
             ->join('mst_akun as a', 'a.id', '=', 'b.id_akun')
             ->select([
